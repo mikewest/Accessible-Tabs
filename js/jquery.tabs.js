@@ -38,7 +38,9 @@
                 currentClass: 'current', // Classname to apply to the LI of the selected Tab
                 tabhead: 'h4', // Tag or valid Query Selector of the Elements to Transform the Tabs-Navigation from (originals are removed)
                 tabbody: '.tabbody', // Tag or valid Query Selector of the Elements to be treated as the Tab Body
-                fx:'show', // can be "fadeIn", "slideDown", "show"
+                fxout:'hide', // can be "fadeOut", "slideUp", "hide"
+                fxin:'show', // can be "fadeIn", "slideDown", "show"
+                fxparallel:false, // should `fxin` and `fxout` execute at the same time?
                 fxspeed: 'normal', // speed (String|Number): "slow", "normal", or "fast") or the number of milliseconds to run the animation
                 currentInfoText: 'current tab: ', // text to indicate for screenreaders which tab is the current one
                 currentInfoPosition: 'prepend', // Definition where to insert the Info Text. Can be either "prepend" or "append"
@@ -87,8 +89,23 @@
                         el.find('ul>li.'+options.currentClass).removeClass(options.currentClass)
                         .find("span."+options.currentInfoClass).remove();
                         tab.blur();
-                        el.find(options.tabbody+':visible').hide().removeClass( currentClass );
-                        el.find(options.tabbody).eq(i)[options.fx](options.fxspeed).addClass( currentClass );
+                        if ( fxparallel ) {
+                            el.find(options.tabbody+':visible')[options.fxout](options.fxspeed, function () { $( this ).removeClass( options.currentClass ); } );
+                            el.find(options.tabbody).eq(i)[options.fxin](options.fxspeed, function () { $( this ).addClass( options.currentClass ); } );
+                        } else {
+                            el.find(options.tabbody+':visible')[options.fxout](
+                                options.fxspeed,
+                                function () {
+                                    $( this ).removeClass( options.currentClass );
+                                    el.find(options.tabbody).eq(i)[options.fxin](
+                                        options.fxspeed,
+                                        function () {
+                                            $( this ).addClass( currentClass )
+                                        }
+                                    );
+                                }
+                            );
+                        }
                         $( '#'+contentAnchor ).text( $(this).text() ).focus();
                         tab[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>')
                         .parent().addClass(options.currentClass);
