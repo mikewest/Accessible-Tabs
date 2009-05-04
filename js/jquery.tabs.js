@@ -54,9 +54,9 @@
 
                 var contentAnchor = o.getUniqueId('accessibletabscontent');
                 var tabsAnchor = o.getUniqueId('accessibletabs');
-                $(el).wrapInner('<div class="'+options.wrapperClass+'"></div>');
+                el.wrapInner('<div class="'+options.wrapperClass+'"></div>');
 
-                $(el).find(options.tabhead).each(function(i){
+                el.find(options.tabhead).each(function(i){
                     var id = '';
                     if(i === 0){
                         id =' id="'+tabsAnchor+'"';
@@ -66,29 +66,30 @@
                     tabCount++;
                 });
 
-                $(el).prepend('<ul class="clearfix '+options.tabsListClass+' tabamount'+tabCount+'">'+list+'</ul>');
-                $(el).find(options.tabbody).hide();
-                $(el).find(options.tabbody+':first').show().before('<'+options.tabhead+'><a tabindex="0" class="accessibletabsanchor" name="'+contentAnchor+'" id="'+contentAnchor+'">'+$(el).find("ul>li:first").text()+'</a></'+options.tabhead+'>');
-                $(el).find("ul>li:first").addClass(options.currentClass)
+                el.prepend('<ul class="clearfix '+options.tabsListClass+' tabamount'+tabCount+'">'+list+'</ul>');
+                el.find(options.tabbody).hide();
+                el.find(options.tabbody+':first').show().before('<'+options.tabhead+'><a tabindex="0" class="accessibletabsanchor" name="'+contentAnchor+'" id="'+contentAnchor+'">'+el.find("ul>li:first").text()+'</a></'+options.tabhead+'>');
+                el.find("ul>li:first").addClass(options.currentClass)
                 .find('a')[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>');
 
                 if (options.syncheights && $.fn.syncHeight) {
-                    $(el).find(options.tabbody).syncHeight();
+                    el.find(options.tabbody).syncHeight();
                     $(window).resize(function(){ 
-                        $(el).find(options.tabbody).syncHeight();
+                        el.find(options.tabbody).syncHeight();
                     });
                 }
 
-                $(el).find('ul.'+options.tabsListClass+'>li>a').each(function(i){
+                el.find('ul.'+options.tabsListClass+'>li>a').each(function(i){
                     $(this).click(function(event){
                         event.preventDefault();
-                        $(el).find('ul>li.'+options.currentClass).removeClass(options.currentClass)
+                        var tab = $( this );
+                        el.find('ul>li.'+options.currentClass).removeClass(options.currentClass)
                         .find("span."+options.currentInfoClass).remove();
-                        $(this).blur();
-                        $(el).find(options.tabbody+':visible').hide();
-                        $(el).find(options.tabbody).eq(i)[options.fx](options.fxspeed);
+                        tab.blur();
+                        el.find(options.tabbody+':visible').hide();
+                        el.find(options.tabbody).eq(i)[options.fx](options.fxspeed);
                         $( '#'+contentAnchor ).text( $(this).text() ).focus();
-                        $(this)[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>')
+                        tab[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>')
                         .parent().addClass(options.currentClass);
                         
                     });
