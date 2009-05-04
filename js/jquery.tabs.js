@@ -24,7 +24,8 @@
  * * * new option tabsListClass to be applied to the generated list of tabs above the content so lists inside the tabscontent can be styled differently
  * * * added clearfix and tabcounter that adds a class in the schema "tabamount{number amount of tabs}" to the ul containg the tabs so one can style the tabs to fit 100% into the width
  */
-
+/*global jQuery, window */
+/*jslint browser: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true */
 (function($) {
     
     $.fn.extend({
@@ -63,7 +64,7 @@
                     }
                     list += '<li><a'+id+' href="#'+contentAnchor+'">'+$(this).text()+'</a></li>';
                     $(this).remove();
-                    tabCount++;
+                    tabCount += 1;
                 });
 
                 el.prepend('<ul class="clearfix '+options.tabsListClass+' tabamount'+tabCount+'">'+list+'</ul>');
@@ -97,4 +98,4 @@
             });
         }
     });
-})(jQuery);
+}(jQuery) );
