@@ -87,8 +87,8 @@
                         el.find('ul>li.'+options.currentClass).removeClass(options.currentClass)
                         .find("span."+options.currentInfoClass).remove();
                         tab.blur();
-                        el.find(options.tabbody+':visible').hide();
-                        el.find(options.tabbody).eq(i)[options.fx](options.fxspeed);
+                        el.find(options.tabbody+':visible').hide().removeClass( currentClass );
+                        el.find(options.tabbody).eq(i)[options.fx](options.fxspeed).addClass( currentClass );
                         $( '#'+contentAnchor ).text( $(this).text() ).focus();
                         tab[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>')
                         .parent().addClass(options.currentClass);
