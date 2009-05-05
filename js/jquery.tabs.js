@@ -89,7 +89,7 @@
                         el.find('ul>li.'+options.currentClass).removeClass(options.currentClass)
                         .find("span."+options.currentInfoClass).remove();
                         tab.blur();
-                        if ( fxparallel ) {
+                        if ( options.fxparallel ) {
                             el.find(options.tabbody+':visible')[options.fxout](options.fxspeed, function () { $( this ).removeClass( options.currentClass ); } );
                             el.find(options.tabbody).eq(i)[options.fxin](options.fxspeed, function () { $( this ).addClass( options.currentClass ); } );
                         } else {
@@ -100,7 +100,7 @@
                                     el.find(options.tabbody).eq(i)[options.fxin](
                                         options.fxspeed,
                                         function () {
-                                            $( this ).addClass( currentClass )
+                                            $( this ).addClass( options.currentClass )
                                         }
                                     );
                                 }
