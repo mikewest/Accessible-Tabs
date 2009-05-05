@@ -70,8 +70,8 @@
                 });
 
                 el.prepend('<ul class="clearfix '+options.tabsListClass+' tabamount'+tabCount+'">'+list+'</ul>');
-                el.find(">"+options.tabbody).hide();
-                el.find(">"+options.tabbody+':first').show().before('<'+options.tabhead+'><a tabindex="0" class="accessibletabsanchor" name="'+contentAnchor+'" id="'+contentAnchor+'">'+el.find("ul>li:first").text()+'</a></'+options.tabhead+'>');
+                el.find('>.'+options.wrapperClass+'>'+options.tabbody).hide();
+                el.find('>.'+options.wrapperClass+'>'+options.tabbody+':first').show().before('<'+options.tabhead+'><a tabindex="0" class="accessibletabsanchor" name="'+contentAnchor+'" id="'+contentAnchor+'">'+el.find("ul>li:first").text()+'</a></'+options.tabhead+'>');
                 el.find("ul>li:first").addClass(options.currentClass)
                 .find('a')[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>');
 
