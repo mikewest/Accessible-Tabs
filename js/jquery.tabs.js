@@ -71,8 +71,8 @@
 
                 el.prepend('<ul class="clearfix '+options.tabsListClass+' tabamount'+tabCount+'">'+list+'</ul>');
                 el.find('>.'+options.wrapperClass+'>'+options.tabbody).hide();
-                el.find('>.'+options.wrapperClass+'>'+options.tabbody+':first').show().before('<'+options.tabhead+'><a tabindex="0" class="accessibletabsanchor" name="'+contentAnchor+'" id="'+contentAnchor+'">'+el.find("ul>li:first").text()+'</a></'+options.tabhead+'>').addClass( options.currentClass );
-                el.find("ul>li:first").addClass(options.currentClass)
+                el.find(options.tabbody+':first').addClass( options.currentClass ).show().before('<'+options.tabhead+'><a tabindex="0" class="accessibletabsanchor" name="'+contentAnchor+'" id="'+contentAnchor+'">'+el.find("ul>li:first").text()+'</a></'+options.tabhead+'>');
+                el.find("ul>li:first").addClass( options.currentClass )
                 .find('a')[options.currentInfoPosition]('<span class="'+options.currentInfoClass+'">'+options.currentInfoText+'</span>');
 
                 if (options.syncheights && $.fn.syncHeight) {
@@ -82,16 +82,32 @@
                     });
                 }
 
-                el.find('ul.'+options.tabsListClass+'>li>a').each(function(i){
+                el.find('>ul.'+options.tabsListClass+'>li>a').each(function(i){
                     $(this).click(function(event){
                         event.preventDefault();
+                        var currentTab      = el.find(options.tabbody+':visible'),
+                            newTab          = el.find(options.tabbody).eq(i),
+                            clickedHeader   = $( this );
+                                                                            
+                        el.trigger('beforeActivate', { current: currentTab, toActivate: newTab, header: clickedHeader } );
                         var tab = $( this );
-                        el.find('ul>li.'+options.currentClass).removeClass(options.currentClass)
+                        el.find('>ul>li.'+options.currentClass).removeClass(options.currentClass)
                         .find("span."+options.currentInfoClass).remove();
                         tab.blur();
                         if ( options.fxparallel ) {
-                            el.find(options.tabbody+':visible')[options.fxout](options.fxspeed, function () { $( this ).removeClass( options.currentClass ); } );
-                            el.find(options.tabbody).eq(i)[options.fxin](options.fxspeed, function () { $( this ).addClass( options.currentClass ); } );
+                            el.find(options.tabbody+':visible')[options.fxout](
+                                options.fxspeed,
+                                function () {
+                                    $( this ).removeClass( options.currentClass );
+                                }
+                            );
+                            el.find(options.tabbody).eq(i)[options.fxin](
+                                options.fxspeed,
+                                function () {
+                                    $( this ).addClass( options.currentClass );
+                                    el.trigger('afterActivate', { current: newTab, previous: currentTab } );
+                                }
+                            ); 
                         } else {
                             el.find(options.tabbody+':visible')[options.fxout](
                                 options.fxspeed,
@@ -100,7 +116,8 @@
                                     el.find(options.tabbody).eq(i)[options.fxin](
                                         options.fxspeed,
                                         function () {
-                                            $( this ).addClass( options.currentClass )
+                                            $( this ).addClass( options.currentClass );
+                                            el.trigger('afterActivate', { current: newTab, previous: currentTab } );
                                         }
                                     );
                                 }
